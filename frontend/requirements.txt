@@ -1,0 +1,18 @@
+# Python packages for the mergemon frontend (Windows; AEDT driven over COM).
+# Versions = what ran on QDG-WS1 (hfss_env, Python 3.11.15).
+#
+#   conda create -n mergemon python=3.11
+#   conda activate mergemon
+#   conda install -c conda-forge gdspy          # GDS export (binary build; pip needs a compiler)
+#   pip install -r frontend\requirements.txt
+#   python %CONDA_PREFIX%\Scripts\pywin32_postinstall.py -install   # once
+# then set GEOMETRY_ENV to "" in local_settings.json (gdspy is in this same env).
+
+quantum-metal==0.8.1        # imported as qiskit_metal
+pyEPR-quantum==1.0.1        # NOT "pyEPR" (an unrelated PyPI package)
+pywin32==312
+numpy==1.26.4
+scipy==1.17.1
+pandas==3.0.5
+matplotlib==3.11.1
+shapely==2.1.2

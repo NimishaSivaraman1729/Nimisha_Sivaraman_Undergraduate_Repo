@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mergemon Designer</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="brand-name">Mergemon Designer</span>
+    <span class="brand-sub">merged-element transmon + readout resonator · HFSS eigenmode → pyEPR</span>
+  </div>
+  <div class="top-actions">
+    <button id="btn-new" class="link" title="Clear every choice">New design</button>
+    <button id="btn-example" class="link" title="Bulk Si 750 µm · SQUID · lumped LC · T coupler · L_J 18 nH, C_J 90 fF · f_r 4.72 GHz, χ 2 MHz">Load example</button>
+    <div id="job-pill" class="pill idle">idle</div>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab active" data-tab="substrate" role="tab"><span class="n">1</span>Substrate</button>
+  <button class="tab" data-tab="design" role="tab"><span class="n">2</span>Design</button>
+  <button class="tab" data-tab="fom" role="tab"><span class="n">3</span>Figures of merit</button>
+  <button class="tab" data-tab="sweep" role="tab"><span class="n">4</span>Sweep</button>
+  <button class="tab" data-tab="results" role="tab"><span class="n">5</span>Results</button>
+</nav>
+
+<main id="main">
+  <section class="panel" id="panel">
+    <!-- 1 substrate -->
+    <div class="tabpage" id="tab-substrate">
+      <h2>Substrate</h2>
+      <p class="lede">The wafer the device sits on.</p>
+      <div class="field-label">Wafer</div>
+      <div class="cards" id="opt-soi"></div>
+      <div class="row">
+        <label class="field">
+          <span class="field-label">Substrate thickness</span>
+          <span class="input-unit"><input id="thickness" type="number" step="1" min="1" value="750"><span>µm</span></span>
+          <span class="hint" id="thickness-hint"></span>
+        </label>
+      </div>
+      <div id="soi-stack" class="sub hidden">
+        <div class="field-label">SOI stack <span class="badge planned">planned</span></div>
+        <div class="row">
+          <label class="field"><span class="field-label">Device layer</span>
+            <span class="input-unit"><input id="soi-device" type="number" step="0.01" value="0.22" disabled><span>µm</span></span></label>
+          <label class="field"><span class="field-label">BOX</span>
+            <span class="input-unit"><input id="soi-box" type="number" step="0.1" value="3" disabled><span>µm</span></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 design -->
+    <div class="tabpage hidden" id="tab-design">
+      <h2>Design</h2>
+      <p class="lede">Pick each part; the design screen builds it as you go.</p>
+      <div class="step"><div class="step-title"><span class="dot q"></span>Qubit</div>
+        <div class="cards" id="opt-qubit"></div>
+        <div class="sub hidden" id="sub-single">
+          <label class="field"><span class="field-label">Pad geometry <span class="badge planned">planned</span></span>
+            <select disabled><option>— not built yet —</option></select></label>
+        </div>
+      </div>
+      <div class="step"><div class="step-title"><span class="dot r"></span>Readout resonator</div>
+        <div class="cards" id="opt-resonator"></div>
+        <div class="sub hidden" id="sub-lumped">
+          <label class="field"><span class="field-label">Capacitor (C_r)</span><select id="res_cap"></select></label>
+          <label class="field"><span class="field-label">Inductor (L_r)</span><select id="res_ind"></select></label>
+          <span class="hint" id="lumped-hint"></span>
+        </div>
+      </div>
+      <div class="step"><div class="step-title"><span class="dot c"></span>Coupling capacitor (resonator ↔ qubit)</div>
+        <div class="cards" id="opt-coupler"></div>
+      </div>
+      <div class="step"><div class="step-title"><span class="dot f"></span>Readout feedline</div>
+        <div class="cards" id="opt-feedline"></div>
+      </div>
+      <div class="step"><div class="step-title"><span class="dot x"></span>Flux line</div>
+        <div class="cards" id="opt-flux"></div>
+      </div>
+    </div>
+
+    <!-- 3 figures of merit -->
+    <div class="tabpage hidden" id="tab-fom">
+      <h2>Figures of merit</h2>
+      <p class="lede">Junction values are fixed by fabrication; f_r and χ are the targets the optimizer hits.</p>
+      <div class="group-title">Junctions (fixed)</div>
+      <div class="row">
+        <label class="field"><span class="field-label">L_J, total</span>
+          <span class="input-unit"><input id="lj" type="number" step="0.1" min="0" placeholder="e.g. 18"><span>nH</span></span>
+          <span class="hint" id="lj-hint">SQUID: two junctions in parallel</span></label>
+        <label class="field"><span class="field-label">C_J, total</span>
+          <span class="input-unit"><input id="cj" type="number" step="1" min="0" placeholder="e.g. 90"><span>fF</span></span>
+          <span class="hint" id="cj-hint"></span></label>
+      </div>
+      <div class="group-title">Targets</div>
+      <div class="row">
+        <label class="field"><span class="field-label">Resonator frequency f_r</span>
+          <span class="input-unit"><input id="fr" type="number" step="0.01" min="0" placeholder="e.g. 4.72"><span>GHz</span></span></label>
+        <label class="field narrow"><span class="field-label">± tolerance</span>
+          <span class="input-unit"><input id="fr-tol" type="number" step="0.01" min="0" value="0.1"><span>GHz</span></span></label>
+      </div>
+      <div class="row">
+        <label class="field"><span class="field-label">Dispersive shift χ_qr</span>
+          <span class="input-unit"><input id="chi" type="number" step="0.1" min="0" placeholder="e.g. 2"><span>MHz</span></span>
+          <span class="hint">full shift (resonator moves χ_qr when the qubit goes 0→1; = 2χ of χ a†a σz)</span></label>
+        <label class="field narrow"><span class="field-label">± tolerance</span>
+          <span class="input-unit"><input id="chi-tol" type="number" step="0.05" min="0" placeholder="10 %"><span>MHz</span></span></label>
+      </div>
+      <div class="row">
+        <label class="field"><span class="field-label">Resonator linewidth κ/2π <span class="optional">optional</span></span>
+          <span class="input-unit"><input id="kappa" type="number" step="0.05" min="0" placeholder="e.g. 1"><span>MHz</span></span>
+          <span class="hint" id="kappa-hint">needs the whole feedline (Design tab)</span></label>
+      </div>
+      <p class="caveat" id="kappa-note" hidden></p>
+    </div>
+
+    <!-- 4 sweep -->
+    <div class="tabpage hidden" id="tab-sweep">
+      <h2>Sweep</h2>
+      <p class="lede">Vary one geometry knob around the current design; every point is solved in HFSS and kept in the database.</p>
+      <label class="field"><span class="field-label">Geometry knob</span><select id="sw-knob"></select>
+        <span class="hint" id="sw-note"></span></label>
+      <div class="row">
+        <label class="field narrow"><span class="field-label">From</span>
+          <span class="input-unit"><input id="sw-start" type="number" step="0.1" min="0"><span>µm</span></span></label>
+        <label class="field narrow"><span class="field-label">To</span>
+          <span class="input-unit"><input id="sw-stop" type="number" step="0.1" min="0"><span>µm</span></span></label>
+        <label class="field narrow"><span class="field-label">Points</span>
+          <span class="input-unit"><input id="sw-n" type="number" step="1" min="1" max="15" value="5"></span></label>
+      </div>
+      <p class="hint" id="sw-plan"></p>
+      <div class="buttons">
+        <button id="sw-check" class="secondary" title="Render every point into a preview AEDT project (set up, not solved) to look at before running">Preview in AEDT</button>
+        <button id="sw-run" class="primary">Run sweep</button>
+      </div>
+      <p class="hint">Each button starts a <b>new</b> sweep in the list on the right. To look at a sweep in AEDT
+        and then solve that same sweep, use the buttons above its charts.</p>
+      <div class="group-title">Progress</div>
+      <div id="job-box-sweep" class="jobbox"><p class="muted">The running job shows in Results → progress, and its points fill in on the right.</p></div>
+    </div>
+
+    <!-- 5 results (left column: job) -->
+    <div class="tabpage hidden" id="tab-results">
+      <h2>Results</h2>
+      <div id="job-box" class="jobbox"><p class="muted">No job started from this page yet.</p></div>
+    </div>
+
+    <footer class="actions" id="actions">
+      <ul class="checklist" id="checklist"></ul>
+      <div class="buttons">
+        <button id="btn-dry" class="secondary" title="Predict the first step without HFSS (~1 min)">Dry run</button>
+        <button id="btn-opt" class="primary" title="Run optimize_multi.py: ~40 min per HFSS iteration, then the delivery re-solve">Optimize</button>
+      </div>
+    </footer>
+  </section>
+
+  <section class="screen" id="screen">
+    <div class="screen-head">
+      <h3>Design screen</h3>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="views">
+      <figure class="view big"><svg id="svg-full" preserveAspectRatio="xMidYMid meet"></svg>
+        <figcaption id="cap-full">device</figcaption></figure>
+      <div class="side">
+        <figure class="view"><svg id="svg-zoom" preserveAspectRatio="xMidYMid meet"></svg>
+          <figcaption>SQUID + coupler (zoom)</figcaption></figure>
+        <figure class="view stack"><svg id="svg-stack" viewBox="0 0 320 150"></svg>
+          <figcaption id="cap-stack">substrate cross-section (not to scale)</figcaption></figure>
+      </div>
+    </div>
+    <p class="screen-note" id="screen-note"></p>
+  </section>
+
+  <section class="results hidden" id="results"></section>
+
+  <section class="results hidden" id="sweepview">
+    <div class="sw-bar"><label class="field"><span class="field-label">Sweep</span><select id="sw-list"></select></label></div>
+    <div id="sw-view"></div>
+  </section>
+  <div id="sw-tip" class="sw-tip hidden" role="tooltip"></div>
+</main>
+
+<dialog id="zoom-dialog"><img id="zoom-img" alt=""><form method="dialog"><button>Close</button></form></dialog>
+<script src="/static/app.js"></script>
+</body>
+</html>
