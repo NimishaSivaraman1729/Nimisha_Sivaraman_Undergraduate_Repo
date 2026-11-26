@@ -1,0 +1,32 @@
+{
+  "design": {
+    "cap_width": 30.0,
+    "cap_gap": 40.0,
+    "vacuum_gap": 5.0,
+    "chip_radius": 135.0,
+    "band": 0.0
+  },
+  "source": "flipmon_cw30_cg40_gap5_R135_band0.aedt / Setup1 : LastAdaptive, 30 passes max, dS 0.001",
+  "integrals": {
+    "substrate_volume": 0.20456799130707812,
+    "vacuum_volume": 2.2389723220529243,
+    "bottom_MA_interior": 281426.83585731173,
+    "bottom_MA_perimeter": 29401.294330654462,
+    "bottom_MS_interior": 13372.404089875985,
+    "bottom_MS_perimeter": 10011.541386394427,
+    "bottom_SA_interior": 142842.00094867652,
+    "bottom_SA_perimeter": 25228.75217991836,
+    "top_MA_interior": 420393.40891059313,
+    "top_MA_perimeter": 2831.3508725909796,
+    "top_MS_interior": 1201.6245398936144,
+    "top_MS_perimeter": 491.3172030983733,
+    "top_SA_interior": 16578.673712564465,
+    "top_SA_perimeter": 2019.0236600912144
+  },
+  "SA_perp": {
+    "bottom_SA_interior": 137664.53881837454,
+    "bottom_SA_perimeter": 19728.244065379302,
+    "top_SA_interior": 16360.12813420058,
+    "top_SA_perimeter": 1696.1726178023487
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "design": "designA",
+  "source": "transmon_designA.aedt / Setup1 : LastAdaptive, 30 passes max, dS 0.001",
+  "integrals": {
+    "substrate_volume": 0.2894746463677813,
+    "vacuum_volume": 0.29232683320718345,
+    "MA_A": 4013.8505504897644,
+    "MA_B": 704.0807010731561,
+    "MS_A": 4013.850550489764,
+    "MS_B": 704.0807010731558,
+    "SA_A": 4218.495625824238,
+    "SA_A_perp": 18.84862278325503,
+    "SA_B": 1257.0995648890307,
+    "SA_B_perp": 65.96423153817865
+  }
+}
