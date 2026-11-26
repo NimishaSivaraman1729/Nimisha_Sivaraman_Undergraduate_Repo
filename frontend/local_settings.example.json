@@ -1,5 +1,0 @@
-{
-  "_comment": "Copy to local_settings.json (same folder) and edit for this computer. Leave a key out to keep its default (see site_config.py). GEOMETRY_ENV empty = gdspy is installed in the same env as qiskit-metal + pyEPR.",
-  "GEOMETRY_ENV": "",
-  "CONDA_EXE": "C:\\Users\\<you>\\miniconda3\\Scripts\\conda.exe"
-}
