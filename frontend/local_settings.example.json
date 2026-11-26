@@ -1,0 +1,10 @@
+{
+  "_comment": "Optional: with one env that has everything, nothing needs setting. Copy to local_settings.json (same folder) to override a default (see site_config.py). Keys under machines.<COMPUTERNAME> apply on that computer only; top-level keys apply everywhere. PYTHON empty = run_frontend.bat picks the most capable Python it finds. GEOMETRY_ENV empty = gdspy is in the same env as qiskit-metal + pyEPR. MICROWAVE_DESIGN is only needed when this folder is not inside the MicrowaveDesign repo.",
+  "machines": {
+    "YOUR-COMPUTERNAME": {
+      "PYTHON": "C:\\Users\\<you>\\miniconda3\\envs\\<env>\\python.exe",
+      "GEOMETRY_ENV": "",
+      "CONDA_EXE": "C:\\Users\\<you>\\miniconda3\\Scripts\\conda.exe"
+    }
+  }
+}
